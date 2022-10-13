@@ -11,7 +11,7 @@ export const ContactList = ({ contacts, filter, deleteContact }) => {
         <Contact
           key={contact.id}
           contact={contact}
-          deleteContact={deleteContact}
+          deleteContact={() => deleteContact(contact.id)}
         />
       ))}
     </ul>

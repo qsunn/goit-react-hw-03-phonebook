@@ -1,11 +1,11 @@
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import { ContactList } from './ContactList';
 import { ContactForm } from './ContactForm ';
 import { Filter } from './Filter';
 
 import { INITIAL_CONTACTS } from '../initialContacts';
 
-export class App extends Component {
+export class App extends PureComponent {
   state = {
     contacts: INITIAL_CONTACTS,
     filter: '',
@@ -13,27 +13,20 @@ export class App extends Component {
 
   componentDidMount() {
     const data = this.getData();
-    this.setState({
-      contacts: [...(data ? data : this.state.contacts)],
-    });
+    if (!data) return;
+    this.setState({ contacts: data });
   }
 
   componentDidUpdate = (prevProps, prevState) => {
     if (this.state.contacts !== prevState.contacts) this.setData();
   };
 
-  shouldComponentUpdate = (prevProps, prevState) =>
-    this.state.contacts !== prevState.contacts ||
-    this.filter !== prevState.filter;
-
   getData = () => JSON.parse(localStorage.getItem('data'));
 
   setData = () =>
     localStorage.setItem('data', JSON.stringify(this.state.contacts));
 
-  searchHandler = e => {
-    this.setState({ filter: e.target.value });
-  };
+  searchHandler = e => this.setState({ filter: e.target.value });
 
   onAddContact = data => {
     const filtered = this.state.contacts.filter(
@@ -41,15 +34,12 @@ export class App extends Component {
     );
     filtered.length
       ? alert(`${data.name} already exists`)
-      : this.setState({
-          contacts: [data, ...this.state.contacts],
-        });
+      : this.setState({ contacts: [data, ...this.state.contacts] });
   };
 
   deleteContact = id => {
-    this.setState({
-      contacts: [...this.state.contacts.filter(contact => contact.id !== id)],
-    });
+    const filtered = this.state.contacts.filter(contact => contact.id !== id);
+    this.setState({ contacts: filtered });
   };
 
   render() {

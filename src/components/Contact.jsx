@@ -6,11 +6,7 @@ export const Contact = ({ contact, deleteContact }) => {
       <p>
         {contact.name}: {contact.number}
       </p>
-      <button
-        type="button"
-        className="delete"
-        onClick={deleteContact.bind(this, contact.id)}
-      >
+      <button type="button" className="delete" onClick={deleteContact}>
         Delete
       </button>
     </li>
